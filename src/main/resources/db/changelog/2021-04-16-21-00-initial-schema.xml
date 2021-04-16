@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+        logicalFilePath="2021-04-16-21-00-initial-schema.xml">
+
+    <changeSet id="init-structure-table" author="amatveiev">
+        <sql>
+            ALTER TABLE IF EXISTS check_product
+                DROP CONSTRAINT IF EXISTS check_product_fk_product;
+
+            ALTER TABLE IF EXISTS check_product
+                DROP CONSTRAINT IF EXISTS check_product_fk_check;
+
+            ALTER TABLE IF EXISTS products_check
+                DROP CONSTRAINT IF EXISTS products_check_fk_user;
+
+            ALTER TABLE IF EXISTS user_roles
+                DROP CONSTRAINT IF EXISTS products_check_fk_role;
+
+            ALTER TABLE IF EXISTS user_roles
+                DROP CONSTRAINT IF EXISTS products_check_fk_user;
+
+            DROP TABLE IF EXISTS check_product CASCADE;
+            DROP TABLE IF EXISTS products CASCADE;
+            DROP TABLE IF EXISTS products_check CASCADE;
+            DROP TABLE IF EXISTS roles CASCADE;
+            DROP TABLE IF EXISTS user_roles CASCADE;
+            DROP TABLE IF EXISTS users CASCADE;
+
+            CREATE TABLE check_product (
+                check_id int8 not null,
+                product_id int8 not null
+            );
+
+            CREATE TABLE products (
+                id  bigserial not null,
+                ean int4 not null,
+                descriptions varchar(255),
+                image bytea, name varchar(255),
+                price numeric(19, 2), primary key (id)
+            );
+
+            CREATE TABLE products_check (
+                id  bigserial not null,
+                check_sum numeric(19, 2),
+                user_id int8,
+                primary key (id)
+            );
+
+            CREATE TABLE roles (
+                id  bigserial not null,
+                name varchar(255),
+                primary key (id)
+            );
+
+            CREATE TABLE user_roles (
+                user_id int8 not null,
+                role_id int8 not null
+            );
+
+            CREATE TABLE users (
+                id  bigserial not null,
+                email varchar(255),
+                password varchar(255),
+                restore_code varchar(255),
+                status varchar(255),
+                username varchar(255),
+                primary key (id)
+            );
+
+            ALTER TABLE IF EXISTS check_product
+                ADD CONSTRAINT check_product_fk_product
+                FOREIGN KEY (product_id) REFERENCES products;
+
+            ALTER TABLE IF EXISTS check_product
+                ADD CONSTRAINT check_product_fk_check
+                FOREIGN KEY (check_id) REFERENCES products_check;
+
+            ALTER TABLE IF EXISTS products_check
+                ADD CONSTRAINT products_check_fk_user
+                FOREIGN KEY (user_id) REFERENCES users;
+
+            ALTER TABLE IF EXISTS user_roles
+                ADD CONSTRAINT products_check_fk_role
+                FOREIGN KEY (role_id) REFERENCES roles;
+
+            ALTER TABLE IF EXISTS user_roles
+                ADD CONSTRAINT products_check_fk_user
+                FOREIGN KEY (user_id) REFERENCES users;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

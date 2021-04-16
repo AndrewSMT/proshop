@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+        logicalFilePath="2021-04-16-22-00-add-data.xml">
+
+    <changeSet id="add-data" author="amatveiev">
+        <sql>
+            INSERT INTO roles (id, name) VALUES (1, 'ROLE_CLIENT');
+            INSERT INTO roles (id, name) VALUES (2, 'ROLE_ADMIN');
+
+            INSERT INTO users (id, email, password, restore_code, status, username)
+            VALUES (1, 'aweq@gmail.com','$2a$10$0SCdo7P1QZNu4x91mks/KuKGozIzjBLnIPEx5CKW7JJaA3RLC1NpW',null,'ACTIVE','Andrew');
+
+            INSERT INTO user_roles (user_id, role_id) VALUES (1,1);
+
+            INSERT INTO products (id, ean, descriptions, image, name, price) VALUES (1,12456347,'testtest',null,'iPhone',500);
+            INSERT INTO products (id, ean, descriptions, image, name, price) VALUES (2,15456347,'testtest',null,'Table',500);
+            INSERT INTO products (id, ean, descriptions, image, name, price) VALUES (3,12656347,'testtest',null,'Mouse',500);
+
+            INSERT INTO products_check (id, check_sum, user_id) VALUES (1,1500,1);
+
+            INSERT INTO check_product (check_id, product_id) VALUES (1,1);
+            INSERT INTO check_product (check_id, product_id) VALUES (1,2);
+            INSERT INTO check_product (check_id, product_id) VALUES (1,3);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
